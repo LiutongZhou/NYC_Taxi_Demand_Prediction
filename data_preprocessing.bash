@@ -96,3 +96,54 @@ HAVING
   bq extract --compression=GZIP \
   'traffic-demand-predict:NYCTaxi.cleanyellow' \
   gs://nyc_taxi_trip/cleanyellow/cleanyellow_*.zip
+
+  # To Download data, uncomment the following
+  #  gsutil cp -r gs://nyc_taxi_trip/cleanyellow S:/DataBackup/
+
+
+############# similarly, we filtered-out clean drop_offs
+ bq query --replace --destination_table 'NYCTaxi.cleanyellow_dropoff' --allow_large_results \
+'SELECT
+  pickup_datetime,
+  dropoff_datetime,
+  pickup_longitude,
+  pickup_latitude,
+  dropoff_longitude,
+  dropoff_latitude,
+  passenger_count,
+  trip_distance,
+  VendorID,
+  RatecodeID,
+  payment_type,
+  fare_amount,
+  total_amount,
+  #duration in minutes
+  (TIMESTAMP_TO_SEC(dropoff_datetime)-TIMESTAMP_TO_SEC(pickup_datetime))/60 AS duration,
+  #In NYC:
+  #1 degree lat ~= 69.1703234284 miles
+  #1 degree lon ~= 52.3831781372 miles
+  #The magic numbers are the squares of these values
+  SQRT( (4784.533643189461*POW((dropoff_latitude-pickup_latitude),2) + 2743.9973517536278*POW((dropoff_longitude-pickup_longitude),2))) AS straight_line_dist
+FROM
+  NYCTaxi.yellow
+WHERE
+  dropoff_longitude>-74.036206  AND dropoff_longitude<-73.909863
+  AND dropoff_latitude>40.680276  AND dropoff_latitude<40.882530
+  AND trip_distance>0.001  AND trip_distance<20
+  AND total_amount>1  AND total_amount<105
+  AND passenger_count<=6
+HAVING
+  duration>2  AND duration<120
+  AND straight_line_dist>0.001  AND straight_line_dist<15
+  AND trip_distance/straight_line_dist>0.95   and trip_distance/straight_line_dist<6
+  # Speed:= trip_distance/(duration/60) in miles/h
+  AND trip_distance/(duration/60)>3.1  AND trip_distance/(duration/60)<55 ;
+  '
+
+  # exporting clean data to cloud storage
+  bq extract --compression=GZIP \
+  'traffic-demand-predict:NYCTaxi.cleanyellow_dropoff' \
+  gs://nyc_taxi_trip/cleanyellow_dropoff/cleanyellow_dropoff*.zip
+
+  # To Download data, uncomment the following
+  #  gsutil cp -r gs://nyc_taxi_trip/cleanyellow_dropoff S:/DataBackup/
