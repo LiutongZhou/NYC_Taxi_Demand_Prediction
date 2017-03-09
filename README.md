@@ -21,8 +21,9 @@
   load Demand will load the Demand table called Demand and the Georeference object named R
 
 Demand
+
             time                 demand    
-    '_____________________'   ' ______________'
+    _____________________    ______________
 
     '2016-01-01 00:00:00'    [23×12 double]
     '2016-01-01 01:00:00'    [23×12 double]
