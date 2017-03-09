@@ -16,7 +16,7 @@
   
   RasterSize: 23 by 12
 
-  For Example:  A [23×12 double] matrix stamped by '2016-01-01 00:00:00' is the number of persons picked up in each cell
+  For Example:  A [23×12 double] matrix stamped by '2016-01-01 00:00:00' is the number of persons picked up in each cell from 00:00:00 till 00:59:59
 
   load Demand will load the Demand table called Demand and the Georeference object named R
 
