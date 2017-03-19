@@ -4,9 +4,14 @@ function DemandMapper( data,~,intermKVStore,time_interval,Z,R)
 % time_interval : in minutes
 
 % remove missing
+% data=rmmissing(data,'DataVariables',@isnumeric);
+
+% clipping the records within Manhattan
+in=NYCTaxi.isinManhattan_mex(data.pickup_latitude,data.pickup_longitude);
+data(~in,:)=[];
+
 data.pickup_datetime=datetime(data.pickup_datetime,'InputFormat','yyyy-MM-dd HH:mm:ss z','TimeZone','UTC');
 data.dropoff_datetime=datetime(data.dropoff_datetime,'InputFormat','yyyy-MM-dd HH:mm:ss z','TimeZone','UTC');
-%data=rmmissing(data,'DataVariables',@isnumeric);
 
 % binning time according to time_interval
 data.pickup_datetime.Minute= floor(data.pickup_datetime.Minute/time_interval)*time_interval;
