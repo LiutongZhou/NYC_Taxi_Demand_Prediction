@@ -19,7 +19,7 @@ clear files filenames;
 % latlimit [40.680276,40.882530], lonlimit [-74.036206,-73.909863]  
 % in NYC 0.009 lat ~=1km and 0.0119lon ~= 1km
 [Demand,R]=NYCTaxi.GenerateDemand.DemandGen(ds,60,[40.680276,40.882530],[-74.036206,-73.909863],0.5);
-save('Demand.mat','Demand','R');
+save('.\Data\Demand.mat','Demand','R');
 
 % %% save to hdf5
 % h5create('demand.h5','/demand_cube',size(Demand));
