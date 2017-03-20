@@ -15,8 +15,9 @@ function [Demand,R]= DemandGen(ds,time_interval,LatLimit,LonLimit,cell_edge_leng
 cellExtentInLatitude=fzero(@(x) deg2sm( distance(40.75,-73.97,40.75+x,-73.97))-cell_edge_length, [0,1]);
 cellExtentInLongitude=fzero(@(x) deg2sm( distance(40.75,-73.97,40.75,-73.97+x))-cell_edge_length, [0,1]);
 R=georefcells(LatLimit,LonLimit,cellExtentInLatitude, cellExtentInLongitude);
-%% Mapreduce Demand Generation
 Z=zeros(R.RasterSize);
+
+%% Mapreduce Demand Generation
 delete(gcp('nocreate'));
 try
     result = mapreduce(ds, ...
