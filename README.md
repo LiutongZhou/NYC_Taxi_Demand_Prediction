@@ -1,5 +1,7 @@
 ## NYC_Taxi_Demand_Prediction
 
+  ### Updated on 2017-03-20: HDF5 and Holiday data uploaded to [onedrive](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?folderid=1e27ef8057af4432fbc2d940480dd482d&authkey=AYgG5cth5d2MJGG8LNFQ2qQ)
+  
   Demand.mat is the Generated Demand Matrices
   
   Format: Matlab Binary file
