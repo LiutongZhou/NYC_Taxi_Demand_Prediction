@@ -29,7 +29,7 @@ Cell Edge Length In Latitude: 0.00723660362598688
                         ...
  ```
  
-Demand: a time table covering the time range: From 2016-01-01 00:00:00 to 2016-06-30 23:00:00. Time Interval: 1 hour
+Demand: a time table covering the time range: From 2016-01-01 00:00:00 to 2016-06-30 23:00:00 with an interval of 1 hour
 
  ```
  Demand = 
