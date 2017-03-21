@@ -1,6 +1,6 @@
 function [Demand,R]= DemandGen(ds,time_interval,LatLimit,LonLimit,cell_edge_length )
 %DemandGen Generate Demand Matrices for each time window
-%   Demand = DemandGen(ds,time_interval,R )
+%   Demand = DemandGen(ds,time_interval,LatLimit,LonLimit,cell_edge_length )
 %   Output:
 %       -Demand: A timetable Demand
 %       -R: georef object
@@ -15,6 +15,7 @@ tic
 cellExtentInLatitude=fzero(@(x) deg2sm( distance(40.75,-73.97,40.75+x,-73.97))-cell_edge_length, [0,1]);
 cellExtentInLongitude=fzero(@(x) deg2sm( distance(40.75,-73.97,40.75,-73.97+x))-cell_edge_length, [0,1]);
 R=georefcells(LatLimit,LonLimit,cellExtentInLatitude, cellExtentInLongitude);
+R.ColumnsStartFrom='north';
 Z=zeros(R.RasterSize);
 
 %% Mapreduce Demand Generation
