@@ -13,22 +13,47 @@ Demand.mat: the Generated Data.
 
 Format: Matlab Binary file. 
 
-demand.h5: the same data rearranged and stored in hdf5 format. 
+> Demand.mat contains two variables: a time table 'Demand' and a Georeference object 'R'
 
-Geo Range: 
-  
-    Latitude Limits: [40.68, 40.887]
-    Longitude Limits: [-74.0418, -73.899]
-  
-Time Range: From 2016-01-01 00:00:00 to 2016-06-30 23:00:00
+>> R: a Georeference object which gives geo information such as geo range
+ ```
+ R=
+             Latitude Limits: [40.6769, 40.8868]
+            Longitude Limits: [-74.0411, -73.9073]
+                 Raster Size: [29, 14]
+       Raster Interpretation: Rectangular Cells
+           Columns StartFrom: 'south'
+              Rows StartFrom: 'west'
+Cell Edge Length In Latitude: 0.00723660362598688
+    Edge Length In Longitude: 0.00955245263273959
+      Coordinate System Type: 'WGS84'
+                        Unit: 'degree'
+                        ...
+ ```
  
-Time Interval: 1 hour
+ >> Demand: a time table. 
+ 
+ >>> Time Range: From 2016-01-01 00:00:00 to 2016-06-30 23:00:00
+ 
+ >>> Time Interval: 1 hour
+
+ ```
+ Demand = 
+
+            time                demand     
+    ___________________    ________________
+
+    2016-01-01 00:00:00    [29×14×2 double]
+    2016-01-01 01:00:00    [29×14×2 double]
+    ...                    ...
+ ```
+ 
+>>> For example: Demand.demand{1}(:,:,1) is a [29×14 double] matrix corresponding to Demand.time(1):2016-01-01 00:00:00. It is the number of persons picked up in each cell from 2016-01-01 00:00:00 till 2016-01-01 00:59:59.
+
+demand.h5: the same data rearranged and stored in hdf5 format. 
   
-RasterSize: 23 by 12
 
-`load Demand` to load data, will load the time table 'Demand' and the Georeference object 'R'
 
-Demand.demand{i}: a 23×12×2 array timestamped by Demand.time(i): (eg. '2016-01-01 00:00:00'), where `Demand.demand{i}(:,:,1)` is the number of pickups and `Demand.demand{i}(:,:,2)` is the number of dropoffs. 
 
-For example: 
-Demand.demand{i}(:,:,1) is a [23×12 double] matrix stamped by Demand.time(1): '2016-01-01 00:00:00'. It is the number of persons picked up in each cell from 00:00:00 till 00:59:59 on 2016-01-01.
+
+
