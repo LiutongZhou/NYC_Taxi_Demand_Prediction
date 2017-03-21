@@ -9,7 +9,9 @@ Updated on 2017-03-21: HDF5 and Holiday data uploaded to [onedrive](https://faci
 
 ### [Generated Data](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?folderid=1e27ef8057af4432fbc2d940480dd482d&authkey=AYgG5cth5d2MJGG8LNFQ2qQ)
 
-Demand.mat: the Generated Data stored in the format of Matlab Binary file. It contains two variables: a time table 'Demand' and a Georeference object 'R'
+The data is generated using 6 months' raw yellow taxi data from 2016-01-01 to 2016-06-30.
+
+Demand.mat: the Generated Data stored in the format of Matlab Binary file. It contains two variables: a time table 'Demand' and a Georeference object 'R'. 
 
 R: a Georeference object which gives geo information such as geo range
  ```
@@ -40,7 +42,7 @@ Demand: a time table covering the time range: From 2016-01-01 00:00:00 to 2016-0
     ...                    ...
  ```
  
-For example: Demand.demand{1}(:,:,1) is a [29×14 double] matrix corresponding to Demand.time(1):2016-01-01 00:00:00. It is the number of persons picked up in each cell from 2016-01-01 00:00:00 till 2016-01-01 00:59:59.
+For example: Demand.demand{1}(:,:,1) is a [29×14 double] matrix corresponding to Demand.time(1):2016-01-01 00:00:00. It is the number of persons who are picked up in each rectangular cell within Manhattan counted from 2016-01-01 00:00:00 till 2016-01-01 00:59:59.
 
 demand.h5: the same data rearranged and stored in hdf5 format. 
   
