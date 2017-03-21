@@ -42,7 +42,7 @@ Demand: a time table covering the time range: From 2016-01-01 00:00:00 to 2016-0
     ...                    ...
  ```
  
-For example: Demand.demand{1}(:,:,1) is a [29×14 double] matrix corresponding to Demand.time(1):2016-01-01 00:00:00. It is the number of persons who are picked up in each rectangular cell within Manhattan counted from 2016-01-01 00:00:00 till 2016-01-01 00:59:59.
+For example: `Demand.demand{1}(:,:,1)` is a [29×14 double] matrix corresponding to `Demand.time(1)`:2016-01-01 00:00:00. It is the number of persons who are picked up in each rectangular cell within Manhattan (defined by Manhattan Boundary) counted from 2016-01-01 00:00:00 till 2016-01-01 00:59:59. Similarly, `Demand.demand{1}(:,:,2)` is the number of persons dropped within Manhattan during the same period of time.
 
 demand.h5: the same data rearranged and stored in hdf5 format. 
   
