@@ -15,23 +15,24 @@
   Format: Matlab Binary file. To load the data
   
   ```Matlab
-  load Demand
+  load Demand;
   ```
   
-  Geo Range: 
+# 
+Geo Range: 
     
     Latitude Limits: [40.68, 40.887]
     
     Longitude Limits: [-74.0418, -73.899]
   
-  Time Range: From 2016-01-01 00:00:00 to 2016-06-30 23:00:00
+Time Range: From 2016-01-01 00:00:00 to 2016-06-30 23:00:00
  
-  Time Interval: 1 hour
+Time Interval: 1 hour
   
-  RasterSize: 23 by 12
+RasterSize: 23 by 12
 
-  For Example:  A [23×12 double] matrix stamped by '2016-01-01 00:00:00' is the number of persons picked up in each cell from 00:00:00 till 00:59:59
+For Example:  A [23×12 double] matrix stamped by '2016-01-01 00:00:00' is the number of persons picked up in each cell from 00:00:00 till 00:59:59
 
-  load Demand will load the Demand table called and the Georeference object named R
+load Demand will load the Demand table called and the Georeference object named R
 
 Demand.demand is a 23×12×2 array where Demand.demand(:,:,1) is the number of pickups and Demand.demand(:,:,2) is the number of dropoffs
