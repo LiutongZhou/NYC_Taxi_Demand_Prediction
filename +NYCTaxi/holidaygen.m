@@ -1,7 +1,8 @@
-function list=holidaygen(startdate,enddate)
+function list=holidaygen(startdate,enddate,dir)
 %holidaygen Generate a US_Holiday.txt file in Data directory
 %   startdate: eg. '2016-01-01'
 %   enddate: eg. '2016-12-31'
+%   dir: eg. 'D:\OneDrive - Columbia University\2017Spring\Research\Data\Data\holidays.txt'
 %   output: a txt file, each line looks like yyyymmdd
 
 list=holidays(datetime(startdate,'Locale','en_US'),datetime(enddate,'Locale','en_US'));
@@ -25,8 +26,8 @@ while i<=length(list)
             i=i+1;
     end
 end
-list=datestr(list,'yyyymmdd');
-fileid=fopen('Data\holiday.txt','w');
-fprintf(fileid,'%s\n',string(list));
+list=string(list)';
+fileid=fopen(dir,'w');
+fprintf(fileid,'%s\r\n',list);
 end
 
