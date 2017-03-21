@@ -26,8 +26,9 @@ Time Interval: 1 hour
   
 RasterSize: 23 by 12
 
-`load Demand` to load data, will load the Demand time table 'Demand' and the Georeference object 'R'
+`load Demand` to load data, will load the time table 'Demand' and the Georeference object 'R'
 
-Demand.demand: a 23×12×2 array where `Demand.demand(:,:,1)` is the number of pickups and `Demand.demand(:,:,2)` is the number of dropoffs
+Demand.demand{i}: a 23×12×2 array timestamped by Demand.time(i): (eg. '2016-01-01 00:00:00'), where `Demand.demand{i}(:,:,1)` is the number of pickups and `Demand.demand{i}(:,:,2)` is the number of dropoffs. 
 
-Demand.demand(:,:,1): a [23×12 double] matrix stamped by Demand.time(1): '2016-01-01 00:00:00'. It is the number of persons picked up in each cell from 00:00:00 till 00:59:59 on 2016-01-01.
+For example: 
+Demand.demand{i}(:,:,1) is a [23×12 double] matrix stamped by Demand.time(1): '2016-01-01 00:00:00'. It is the number of persons picked up in each cell from 00:00:00 till 00:59:59 on 2016-01-01.
