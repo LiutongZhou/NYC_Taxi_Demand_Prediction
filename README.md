@@ -1,10 +1,22 @@
-## NYC_Taxi_Demand_Prediction
+# NYC Taxi Demand Prediction
 
-  ### Updated on 2017-03-20: HDF5 and Holiday data uploaded to [onedrive](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?folderid=1e27ef8057af4432fbc2d940480dd482d&authkey=AYgG5cth5d2MJGG8LNFQ2qQ)
+
+## Updated on 2017-03-21: HDF5 and Holiday data uploaded to [onedrive](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?folderid=1e27ef8057af4432fbc2d940480dd482d&authkey=AYgG5cth5d2MJGG8LNFQ2qQ)
+
+## Source of Raw Data
+
+* Weather: https://www.ncdc.noaa.gov/qclcd/QCLCD
+* NYC Taxi: http://www1.nyc.gov/html/tlc/html/about/trip_record_data.shtml
+
+## Generated Data
+
+  Demand.mat is the Generated Demand Time Table
   
-  Demand.mat is the Generated Demand Matrices
+  Format: Matlab Binary file. To load the data
   
-  Format: Matlab Binary file
+  ```Matlab
+  load Demand
+  ```
   
   Geo Range: 
     
@@ -20,15 +32,6 @@
 
   For Example:  A [23×12 double] matrix stamped by '2016-01-01 00:00:00' is the number of persons picked up in each cell from 00:00:00 till 00:59:59
 
-  load Demand will load the Demand table called Demand and the Georeference object named R
+  load Demand will load the Demand table called and the Georeference object named R
 
-Demand
-
-            time                 demand    
-    _____________________    ______________
-
-    '2016-01-01 00:00:00'    [23×12 double]
-    '2016-01-01 01:00:00'    [23×12 double]
-    '2016-01-01 02:00:00'    [23×12 double]
-	...							...
-
+Demand.demand is a 23×12×2 array where Demand.demand(:,:,1) is the number of pickups and Demand.demand(:,:,2) is the number of dropoffs
