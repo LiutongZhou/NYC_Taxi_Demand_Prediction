@@ -9,9 +9,9 @@ Updated on 2017-03-21: HDF5 and Holiday data uploaded to [onedrive](https://faci
 
 ### [Generated Data](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?folderid=1e27ef8057af4432fbc2d940480dd482d&authkey=AYgG5cth5d2MJGG8LNFQ2qQ)
 
-The data is generated using 6 months' raw yellow taxi data from 2016-01-01 to 2016-06-30.
+The data is generated using 6 months' raw yellow taxi data from 2016-01-01 to 2016-06-30. For now, the 6 months' raw data has a size of 10 GB. The data generation process (designed and implemented in a Mapreduce workflow) takes 3.5 hours. Processing one year's data is expected to take 7 hours.
 
-Demand.mat: the Generated Data stored in the format of Matlab Binary file. It contains two variables: a time table 'Demand' and a Georeference object 'R'. 
+Demand.mat: the Generated Data stored in the format of Matlab Binary File. It contains two variables: a time table 'Demand' and a Georeference object 'R'. 
 
 R: a Georeference object which gives geo information such as geo range
  ```
