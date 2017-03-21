@@ -10,7 +10,7 @@ Updated on 2017-03-21: HDF5 and Holiday data uploaded to [onedrive](https://faci
 ### [Generated Data](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?folderid=1e27ef8057af4432fbc2d940480dd482d&authkey=AYgG5cth5d2MJGG8LNFQ2qQ)
 
 The generated data is derived using 6 months' raw yellow taxi data (from 2016-01-01 to 2016-06-30). For now, we used only 6 months' raw data with a total size of 10 GB. The data generation process (designed and implemented in a Mapreduce workflow) takes 3.5 hours. And processing one year's data is expected to take 7 hours. This process could be done on a cluster (need to contact Columbia HPC) using the same code.
-
+____
 Demand.mat: the Generated Data stored in the format of Matlab Binary File. It contains two variables: a time table 'Demand' and a Georeference object 'R'. 
 
 R: a Georeference object which gives geo information such as geo range
@@ -29,7 +29,7 @@ Cell Edge Length In Latitude: 0.00723660362598688
                         ...
  ```
  
-Demand: a time table covering the time range: From 2016-01-01 00:00:00 to 2016-06-30 23:00:00 with an interval of 1 hour
+Demand: a time table ranging from 2016-01-01 00:00:00 to 2016-06-30 23:00:00 with an interval of 1 hour
 
  ```
  Demand = 
@@ -43,7 +43,7 @@ Demand: a time table covering the time range: From 2016-01-01 00:00:00 to 2016-0
  ```
  
 For example: `Demand.demand{1}(:,:,1)` is a [29×14 double] matrix corresponding to `Demand.time(1)`:2016-01-01 00:00:00. It is the number of persons who are picked up in each rectangular cell within Manhattan (defined by Manhattan Boundary) counted from 2016-01-01 00:00:00 till 2016-01-01 00:59:59. Similarly, `Demand.demand{1}(:,:,2)` is the number of persons dropped within Manhattan during the same period of time.
-
+____
 demand.h5: the same data rearranged and stored in hdf5 format. 
   
 
