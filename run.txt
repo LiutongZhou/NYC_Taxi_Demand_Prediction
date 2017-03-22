@@ -1,0 +1,1 @@
+matlab -nosplash -nodesktop -nodisplay -wait -r "cd('your_path_that_contains_the_+NYCTaxi_package');NYCTaxi.main;exit;" -logfile log.log
