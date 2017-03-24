@@ -1,1 +1,4 @@
-matlab -nosplash -nodesktop -nodisplay -wait -r "cd('your_path_that_contains_the_+NYCTaxi_package');NYCTaxi.main;exit;" -logfile log.log
+mkdir test
+xcopy +NYCTaxi test /E
+cd test 
+matlab -nosplash -nodesktop -nodisplay -wait -r "NYCTaxi.main;exit;" -logfile log.log

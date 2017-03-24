@@ -1,8 +1,6 @@
-function [ output_args ] = DemandVis( demand,R )
+function  DemandVis( Demand,R,querytime )
 %DEMANDVIS 此处显示有关此函数的摘要
-%   此处显示详细说明
-demand=Demand.demand{1}(:,:,1);
-
+%
 %% imagesc
 figure
 im=imagesc(demand);
@@ -10,7 +8,7 @@ im=imagesc(demand);
 %% Geo show Base Map
 nycshape=shaperead('nycshape\manhattan.shp',...
     'Selector',{@(BoroName) strcmpi(BoroName,'Manhattan'),'BoroName'},'UseGeoCoords',true) ;
-figure
+%figure
 usamap(zeros(R.RasterSize),R);
 f1=geoshow(nycshape);
 %% Contour on top of Geoshape base map
@@ -24,8 +22,7 @@ cb.XLabel.String='haha';
 
 %% Surface Plot on top of Contour
 usamap(zeros(R.RasterSize),R);
-f=geoshow(demand,R,'DisplayType','surface','ZData',demand+2500,'CData',demand)
-f.FaceAlpha=0.5;
+f=geoshow(demand,R,'DisplayType','surface','ZData',demand+2500,'CData',demand,'FaceAlpha',0.5)
 view(3)
 tightmap
 daspectm('m',2)
