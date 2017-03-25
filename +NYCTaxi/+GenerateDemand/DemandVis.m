@@ -9,23 +9,32 @@ im=imagesc(demand);
 nycshape=shaperead('nycshape\manhattan.shp',...
     'Selector',{@(BoroName) strcmpi(BoroName,'Manhattan'),'BoroName'},'UseGeoCoords',true) ;
 %figure
-usamap(zeros(R.RasterSize),R);
+usamap(zeros(R.RasterSize),R);framem off
+axesm
 f1=geoshow(nycshape);
+view(3);
 %% Contour on top of Geoshape base map
 usamap(zeros(R.RasterSize),R);
-contourfm(demand,R)
+[~,ct]=contourfm(demand,R);
 cb=contourcbar(gca,'Location','southoutside');
-cb.XLabel.String='haha';
-%contourcmap('jet', 'Colorbar', 'on', ...
+cb.XLabel.String='Demand';
+%{
+contourcmap('jet', 'Colorbar', 'on', ...
    'Location', 'horizontal', ...
    'TitleString', 'Contour Intervals in Meters');
-
+%}
+for i=1:floor(length(ct.Children)/2)
+    ct.Children(i).ZData=ones(size(ct.Children(i).XData))*2000;
+    ct.Children(i).Color='red';
+ct.Children(i).LineWidth=0.001;
+end
+for i=ceil(length(ct.Children)/2):length(ct.Children);ct.Children(i).FaceAlpha=0.5;ct.Children(i).FaceAlpha=0.3;end
 %% Surface Plot on top of Contour
 usamap(zeros(R.RasterSize),R);
-f=geoshow(demand,R,'DisplayType','surface','ZData',demand+2500,'CData',demand,'FaceAlpha',0.5)
+f=geoshow(demand,R,'DisplayType','surface','ZData',demand+4000,'CData',demand,'FaceAlpha',0.4);
 view(3)
-tightmap
-daspectm('m',2)
+%tightmap
+daspectm('m',3)
 
 %% Mesh Base Map
 usamap(zeros(R.RasterSize),R);
