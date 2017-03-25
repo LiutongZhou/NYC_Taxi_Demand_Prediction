@@ -75,15 +75,18 @@ if exist('lat_lon','var')
                 flipud( normalized_demand(:,:,flag,time_window)    )    );
             %integrate interpolation function over region
             
-            %{
-            %This is inefficient, use intpoly instead.
-            warning('off');
-            dataarray(flag,time_window)   = integral2(@(lat,lon)F(lat,lon).*region(lat,lon),...
-                min(lat_lon(:,1)),max(lat_lon(:,1)),min(lat_lon(:,2)),max(lat_lon(:,2)));
-            %}
+            %run an efficient algorithm
             
             dataarray(flag,time_window)=NYCTaxi.intpoly(@(lat,lon)F(lat,lon),...
                 lat_lon(:,1),lat_lon(:,2));
+                    
+            %{
+            %This is inefficient, use intpoly instead.
+                warning('off');
+                dataarray(flag,time_window)   = integral2(@(lat,lon)F(lat,lon).*region(lat,lon),...
+                    min(lat_lon(:,1)),max(lat_lon(:,1)),min(lat_lon(:,2)),max(lat_lon(:,2)));
+                warning('on');
+             %}                   
         end
     end
 end
