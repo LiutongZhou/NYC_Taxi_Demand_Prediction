@@ -1,5 +1,7 @@
 ## NYC Taxi Demand Prediction
 
+The [draft](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?docid=134225cf561184cdb99fcac96a455a106&authkey=AeHwvvnySGt9y19YbvKxRSc) is constantly being updated on onedrive. 
+
 Updated on 2017-03-21: HDF5 and Holiday data uploaded to [onedrive](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?folderid=1e27ef8057af4432fbc2d940480dd482d&authkey=AYgG5cth5d2MJGG8LNFQ2qQ)
 
 ### Source of Raw Data
