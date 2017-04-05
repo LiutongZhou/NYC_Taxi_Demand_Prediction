@@ -6,7 +6,7 @@
 
 ### Source of Raw Data
 
-1. Weather: https://www.ncdc.noaa.gov/qclcd/QCLCD
+1. Weather: https://www.ncdc.noaa.gov/qclcd/QCLCD. A batch order is available through https://www.ncdc.noaa.gov/cdo-web/datasets
 2. NYC Taxi: http://www1.nyc.gov/html/tlc/html/about/trip_record_data.shtml
 
 ### [Generated Data](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?folderid=1e27ef8057af4432fbc2d940480dd482d&authkey=AYgG5cth5d2MJGG8LNFQ2qQ)
