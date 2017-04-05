@@ -1,12 +1,8 @@
 clear;clc;close all;
 import NYCTaxi.*
 %% unzip data downloaded from google cloud
-
 file_dir='S:\DataBackup\cleanyellow';
-try
-    unzipdata(file_dir)
-catch 
-end
+unzipdata(file_dir)
 
 %% Generate Demand
 files=dir(file_dir);
