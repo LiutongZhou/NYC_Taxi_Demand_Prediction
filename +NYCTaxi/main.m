@@ -4,7 +4,7 @@ import NYCTaxi.*
 
 file_dir='S:\DataBackup\cleanyellow';
 try
-    GenerateDemand.unzipdata(file_dir)
+    unzipdata(file_dir)
 catch 
 end
 

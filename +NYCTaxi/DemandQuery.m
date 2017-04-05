@@ -2,6 +2,7 @@ function [dataarray,time ]= DemandQuery(Demand,R, querytime,lat_lon)
 %%DemandQuery [dataarray,time ]= DemandQuery(Demand,R, querytime,lat_lon)
 %Query Demand values for the specified time (or time range) and locations
 %   input:
+%       -Demand and R: The generated Timetable Demand and Refrence Object R
 %       -querytime: a timestamp like {'2016-01-01 10:00:00'}
 %                   or a time range like {'starttime','endtime',timeinterval}
 %                   if querytime is a timestamp, return Demand values for the specified time

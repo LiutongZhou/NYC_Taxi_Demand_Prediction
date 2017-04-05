@@ -1,5 +1,5 @@
 function unzipdata(file_dir)
-%% Unzip data in the specified folder
+%%unzipdata unzipdata(file_dir) Unzip data in the specified folder
 
 if ~exist('file_dir','var')
     file_dir='S:\DataBackup\cleanyellow';
