@@ -1,32 +1,23 @@
+create database NYCTaxi;
 CREATE EXTENSION postgis;
 
-CREATE TABLE green_tripdata_staging (
+CREATE TABLE clean_yellow (
   id serial primary key,
-  vendor_id varchar,
-  lpep_pickup_datetime varchar,
-  lpep_dropoff_datetime varchar,
-  store_and_fwd_flag varchar,
-  rate_code_id varchar,
-  pickup_longitude numeric,
-  pickup_latitude numeric,
-  dropoff_longitude numeric,
-  dropoff_latitude numeric,
-  passenger_count varchar,
-  trip_distance varchar,
-  fare_amount varchar,
-  extra varchar,
-  mta_tax varchar,
-  tip_amount varchar,
-  tolls_amount varchar,
-  ehail_fee varchar,
-  improvement_surcharge varchar,
-  total_amount varchar,
-  payment_type varchar,
-  trip_type varchar,
-  pickup_location_id varchar,
-  dropoff_location_id varchar,
-  junk1 varchar,
-  junk2 varchar
+  pickup_datetime timestamp without time zone,
+  dropoff_datetime timestamp without time zone,
+  pickup_longitude,
+  pickup_latitude,
+  dropoff_longitude,
+  dropoff_latitude,
+  passenger_count,
+  trip_distance,
+  VendorID,
+  RatecodeID,
+  payment_type,
+  fare_amount,
+  total_amount,
+  duration,
+  straight_line_dist
 );
 /*
 N.B. junk columns are there because some tripdata file headers are
@@ -35,73 +26,8 @@ but data actually has 22 or 23 columns per row, which COPY doesn't like.
 junk1 and junk2 should always be null
 */
 
-CREATE TABLE yellow_tripdata_staging (
-  id serial primary key,
-  vendor_id varchar,
-  tpep_pickup_datetime varchar,
-  tpep_dropoff_datetime varchar,
-  passenger_count varchar,
-  trip_distance varchar,
-  pickup_longitude numeric,
-  pickup_latitude numeric,
-  rate_code_id varchar,
-  store_and_fwd_flag varchar,
-  dropoff_longitude numeric,
-  dropoff_latitude numeric,
-  payment_type varchar,
-  fare_amount varchar,
-  extra varchar,
-  mta_tax varchar,
-  tip_amount varchar,
-  tolls_amount varchar,
-  improvement_surcharge varchar,
-  total_amount varchar,
-  pickup_location_id varchar,
-  dropoff_location_id varchar,
-  junk1 varchar,
-  junk2 varchar
-);
 
-CREATE TABLE uber_trips_staging (
-  id serial primary key,
-  pickup_datetime timestamp without time zone,
-  pickup_latitude numeric,
-  pickup_longitude numeric,
-  base_code varchar
-);
-
-CREATE TABLE uber_trips_2015 (
-  id serial primary key,
-  dispatching_base_num varchar,
-  pickup_datetime timestamp without time zone,
-  affiliated_base_num varchar,
-  location_id integer,
-  nyct2010_ntacode varchar
-);
-
-CREATE TABLE taxi_zone_lookups (
-  location_id integer primary key,
-  borough varchar,
-  zone varchar,
-  service_zone varchar,
-  nyct2010_ntacode varchar
-);
-
-CREATE TABLE fhv_trips (
-  id serial primary key,
-  dispatching_base_num varchar,
-  pickup_datetime timestamp without time zone,
-  location_id integer
-);
-
-CREATE TABLE fhv_bases (
-  base_number varchar primary key,
-  base_name varchar,
-  dba varchar,
-  dba_category varchar
-);
-
-CREATE UNIQUE INDEX index_fhv_bases_on_base_number ON fhv_bases (base_number);
+CREATE UNIQUE INDEX index_fhv_bases_on_base_number ON tabel (column);
 CREATE INDEX index_fhv_bases_on_dba_category ON fhv_bases (dba_category);
 
 CREATE TABLE cab_types (
