@@ -1,0 +1,21 @@
+[
+  {"name": "Station", "type": "string"},
+  {"name": "Station_Name", "type": "string"},
+  {"name": "Elevation", "type": "float"},
+  {"name": "Latitude", "type": "float"},
+  {"name": "Longitude", "type": "float"},
+  {"name": "Date", "type": "timestamp"},
+  {"name": "ReportType", "type": "string"},
+  {"name": "HourlySkyConditions", "type": "string"},
+  {"name": "HourlyVisibility", "type": "float"}
+  {"name": "HourlyPresentWeatherType", "type": "string"},
+  {"name": "HourlyDryBulbTemperatureF", "type": "float"},
+  {"name": "HourlyDryBulbTemperatureC", "type": "float"},
+  {"name": "HourlyWetBulbTemperatureF", "type": "float"},
+  {"name": "HourlyWetBulbTemperatureC", "type": "float"},
+  {"name": "HourlyDewPointTemperatureF", "type": "float"},
+  {"name": "HourlyDewPointTemperatureC", "type": "float"},
+]
+
+
+HourlyRelativeHumidity              HourlyWindSpeed                     HourlyWindDirection                 HourlyWindGustSpeed                 HourlyStationPressure               HourlyPressureTendency              HourlyPressureChange                HourlySeaLevelPressure              HourlyPrecipitation                 HourlyAltimeterSetting              DailyMaximumDryBulbTemperature      DailyMinimumDryBulbTemperature      DailyAverageDryBulbTemperature      DailyDepartureFromNormalAverageTemperature DailyAverageRelativeHumidity        DailyAverageDewPointTemperature     DailyAverageWetBulbTemperature      DailyHeatingDegreeDays              DailyCoolingDegreeDays              DailySunrise                        DailySunset                         DailyPrecipitation                  DailySnowfall                       DailySnowDepth                      DailyAverageStationPressure         DailyAverageSeaLevelPressure        DailyAverageWindSpeed               DailyPeakWindSpeed                  PeakWindDirection                   DailySustainedWindSpeed             DailySustainedWindDirection         MonthlyMaximumTemperature           MonthlyMinimumTemperature           MonthlyMeanTemperature              MonthlyAverageRH                    MonthlyDewpointTemperature          MonthlyWetBulb                      MonthlyHeatingDegreeDays            MonthlyCoolingDegreeDays            MonthlyStationPressure              MonthlySeaLevelPressure             MonthlyAverageWindSpeed             MonthlyTotalSnowfall                MonthlyDepartureFromNormalMaximumTemperature MonthlyDepartureFromNormalMinimumTemperature MonthlyDepartureFromNormalAverageTemperature MonthlyDepartureFromNormalPrecipitation MonthlyTotalLiquidPrecipitation     MonthlyGreatestPrecip               MonthlyGreatestPrecipDate           MonthlyGreatestSnowfall             MonthlyGreatestSnowfallDate         MonthlyGreatestSnowDepth            MonthlyGreatestSnowDepthDate        MonthlyDaysWithGT90Temp             MonthlyDaysWithLT32Temp             MonthlyDaysWithGT32Temp             MonthlyDaysWithLT0Temp              MonthlyDaysWithGT001Precip          MonthlyDaysWithGT010Precip          MonthlyMaxSeaLevelPressureValue     MonthlyMaxSeaLevelPressureValueDate MonthlyMaxSeaLevelPressureValueTime MonthlyMinSeaLevelPressureValue     MonthlyMinSeaLevelPressureValueDate MonthlyMinSeaLevelPressureValueTime MonthlyTotalHeatingDegreeDays       MonthlyTotalCoolingDegreeDays       MonthlyDepartureFromNormalHeatingDD MonthlyDepartureFromNormalCoolingDD 
