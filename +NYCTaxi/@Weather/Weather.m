@@ -7,32 +7,45 @@ classdef Weather < handle
     properties
         path char
         file_name char
-    end
-    properties(Dependent,SetAccess=private)% derived properties
         rawdata table
         daily timetable
         hourly timetable
-        refined timetable
+        DailyWeatherTypes
+        HourlyWeatherTypes
     end
-    properties(Hidden)      
+    
+    properties(Hidden)
         type_mapper;
     end
-    methods
+    
+    methods %ordinary methods
         function Weather=Weather(file_name)% constructor
             Weather.file_name=file_name;
             Weather.path= fileparts(file_name);
+            Weather.rawdata=readrawdata(Weather);
+            Weather.daily=getdaily(Weather);
+            Weather.hourly=gethourly(Weather);
             S=load('+NYCTaxi/@Weather/WeatherTypeMapper.mat');
             Weather.type_mapper=S.type_mapper;
         end
         CleanWeather(Weather)
-        ParseWeatherType(Weather)
+        [daily_weather,hourly_weather]=ParseWeatherType(Weather)
+        function refined=refine(Weather)
+            [dailywt,hourlywt]=Weather.ParseWeatherType;
+            tb_daily=Weather.daily(:,2:end);
+            tb_daily.DailyWeatherType=dailywt.dummy;
+            tb_hourly=Weather.hourly(:,2:end);
+            tb_hourly.HourlyWeatherType=hourlywt.dummy;
+            refined=synchronize(tb_hourly,tb_daily,'first','nearest');
+        end
+        save2mat(obj,outputpath)
     end
-    %% Access Methods
-    methods
-        function rawdata=get.rawdata(Weather)
-            rawdata=readrawdata(Weather);
-        end      
-        function tb_daily=get.daily(Weather)
+    methods(Static)
+        convert2hdf5(file_dir)
+    end
+    methods(Access=private, Hidden=true)% private methods (only for internal use)
+        tb=readrawdata(obj)
+        function tb_daily=getdaily(Weather)
             filename= fullfile(Weather.path,'Clean_Daily.csv') ;
             if exist(filename,'file')~=2 % if no Clean_Daily.csv in the path, generate it
                 Weather.CleanWeather
@@ -44,7 +57,7 @@ classdef Weather < handle
             tb_daily=table2timetable(tb_daily);
             tb_daily.Properties.DimensionNames{1}='Datetime';
         end
-        function tb_hourly=get.hourly(Weather)
+        function tb_hourly=gethourly(Weather)
             filename= fullfile(Weather.path,'Clean_Hourly.csv') ;
             if exist(filename,'file')~=2 % if no Clean_Hourly.csv in the path, generate it
                 Weather.CleanWeather
@@ -54,13 +67,6 @@ classdef Weather < handle
             tb_hourly=readtable( filename,opts);
             tb_hourly.Properties.VariableNames([1,2])={'Datetime','HourlyWeatherType'};
             tb_hourly=table2timetable(tb_hourly);
-        end     
-        function refined=get.refined(Weather)
-            %[~,]=Weather.ParseWeatherType;
         end
-    end
-    %% private methods (only for internal use)
-    methods(Access=private, Hidden=true)
-        tb=readrawdata(obj)
     end
 end

@@ -29,12 +29,27 @@ hourly_weather_types=cellfun(decode,list,'UniformOutput',false);
 %% step 3 and step 4
 %for daily weather
 [daily_dummy,daily_weather_label]=cate2dummy(daily_weather_types);
-daily_weather=array2table(daily_dummy,'VariableNames',...
+tb_daily_weather=array2table(daily_dummy,'VariableNames',...
     regexprep(daily_weather_label,'\s+','_') );
 %for hourly weather
 [hourly_dummy,hourly_weather_label]=cate2dummy(hourly_weather_types);
-hourly_weather=array2table(hourly_dummy,'VariableNames',...
+tb_hourly_weather=array2table(hourly_dummy,'VariableNames',...
     regexprep( hourly_weather_label ,'\s+','_') );
+
+%% Reorganize data
+tb_daily_weather.Datetime=tb_daily.Datetime;
+tb_daily_weather=table2timetable(tb_daily_weather);
+tb_hourly_weather.Datetime=tb_hourly.Datetime;
+tb_hourly_weather=table2timetable(tb_hourly_weather);
+
+%% Encapsulate results
+daily_weather=struct('label',{daily_weather_label},...
+    'dummy',daily_dummy,'table',tb_daily_weather);
+hourly_weather=struct('label',{hourly_weather_label},...
+    'dummy',hourly_dummy,'table',tb_hourly_weather);
+%% Set Weather object Properties
+weather.DailyWeatherTypes=daily_weather_label;
+weather.HourlyWeatherTypes=hourly_weather_label;
 end
 
 %% Subrutine
@@ -53,7 +68,7 @@ function [dummy,label]=cate2dummy(catcell)
 label=categories( catcell{1} );
 Gidx=cellfun( @grp2idx,catcell,'UniformOutput',false );
 
-%%
+%% create dummy
 n=length(Gidx);
 % dummy=false(n,length(label));
 subs=[];
