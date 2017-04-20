@@ -11,6 +11,13 @@ bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20160
 bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20160501' gs://nyc_taxi_trip/yellow_tripdata_2016-05.csv
 bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20160601' gs://nyc_taxi_trip/yellow_tripdata_2016-06.csv 
 
+bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20160701' gs://nyc_taxi_trip/yellow_tripdata_2016-07.csv 
+bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20160801' gs://nyc_taxi_trip/yellow_tripdata_2016-08.csv 
+bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20160901' gs://nyc_taxi_trip/yellow_tripdata_2016-09.csv 
+bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20161001' gs://nyc_taxi_trip/yellow_tripdata_2016-10.csv 
+bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20161101' gs://nyc_taxi_trip/yellow_tripdata_2016-11.csv 
+bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20161201' gs://nyc_taxi_trip/yellow_tripdata_2016-12.csv 
+
 
 # data stats
 bq query --replace --destination_table 'NYCTaxi.stat' \
@@ -54,6 +61,7 @@ WHERE
 #straight_line_dist:0~15 mile 
 # trip_distance/straight_line_dist: 0.95~6 #note that if winding factor <1, it violates euclidean distance limit. if it is too large, the track is not reasonable
 # speed: walking speed ~ speed limit: 3.1~55 (mph)
+# fare rate:  Fare/Distance: 2~10  
 bq query --replace --destination_table 'NYCTaxi.cleanyellow' --allow_large_results \
 'SELECT
   pickup_datetime,
@@ -79,17 +87,18 @@ bq query --replace --destination_table 'NYCTaxi.cleanyellow' --allow_large_resul
 FROM
   NYCTaxi.yellow
 WHERE
-  pickup_longitude>-74.036206  AND pickup_longitude<-73.909863
-  AND pickup_latitude>40.680276  AND pickup_latitude<40.882530
-  AND trip_distance>0.001  AND trip_distance<20
-  AND total_amount>1  AND total_amount<105
+  (pickup_longitude BETWEEN -74.036206  AND -73.909863)
+  AND (pickup_latitude BETWEEN 40.680276  AND 40.882530)
+  AND (trip_distance BETWEEN 0.001  AND 20 )
+  AND (total_amount BETWEEN 1  AND 105 )
   AND passenger_count<=6
+  and (fare_amount/trip_distance BETWEEN 2   AND 10)
 HAVING
-  duration>2  AND duration<120
-  AND straight_line_dist>0.001  AND straight_line_dist<15
-  AND trip_distance/straight_line_dist>0.95   and trip_distance/straight_line_dist<6
+  (duration BETWEEN 2  AND 120)
+  AND (straight_line_dist BETWEEN 0.001  AND 15)
+  AND (trip_distance/straight_line_dist BETWEEN 0.95 and 6)
   # Speed:= trip_distance/(duration/60) in miles/h
-  AND trip_distance/(duration/60)>3.1  AND trip_distance/(duration/60)<55 ;
+  AND (trip_distance/(duration/60) BETWEEN 3.1  AND 55 ) ;
   '
 
   # exporting clean data to cloud storage
