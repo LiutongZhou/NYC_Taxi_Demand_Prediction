@@ -1,6 +1,6 @@
 function tb=Stack(obj)
 %Stack tb=stack(obj) Converts Demand Table to an stacked timetable
-%which holds pickup and drop up columns
+%which holds RegionID, pickup and drop up columns
 
 %% Demand to array
 Array=cat(4,obj.Demand.demand{:});

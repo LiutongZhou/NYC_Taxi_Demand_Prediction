@@ -23,6 +23,7 @@ classdef DemandClass
         end
         [pickups,dropoffs]=Flatten(obj);
         tb=Stack(obj);
+        Demand=add_holiday_mark(Demand);
     end
     
 end

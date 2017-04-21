@@ -27,6 +27,9 @@ while i<=length(list)
     end
 end
 list=string(list)';
+if nargin==2
+    return;
+end
 fileid=fopen(dir,'w');
 fprintf(fileid,'%s\r\n',list);
 end

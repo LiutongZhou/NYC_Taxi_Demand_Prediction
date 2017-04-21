@@ -1,4 +1,4 @@
-%% Random Forest
+%% Least Square Boosting Model
 load 'D:\OneDrive - Columbia University\2017Spring\Research\Data\Data\Meteorology'
 import NYCTaxi.*
 Demand=DemandClass( 'D:\OneDrive - Columbia University\2017Spring\Research\Data\Data\Demand.mat');
@@ -16,30 +16,32 @@ n=floor(height(tb)*0.9);
 trainingset=tb(1:n,:);
 testset=tb(n+1:end,:);
 
-%% Train and Tune
+%% Tune Hyperparameters and Train an LSBoosting 
+rng default
 tic
-md = TreeBagger(10,trainingset,'pickups', 'PredictorNames',...
-    {'timeofday','dayofweek','season','datenum','RegionID','is_holiday'...
+md = fitrensemble(trainingset,'pickups',...
+    'PredictorNames',{'timeofday','dayofweek','season','datenum','RegionID','is_holiday'...
     'Hourlydrybulbtempc','Hourlywindspeed','Hourlyprecip','Dailysnowfall','Dailysustainedwindspeed'},...
     'CategoricalPredictors',{'is_holiday','RegionID','season','dayofweek'},...
-    'Method','regression',    'PredictorSelection','interaction-curvature',...
-    'OOBPredictorImportance','on',...
-    'NumPrint',5,'Options',statset('UseParallel',true));
+    'Method','LSBoost',...
+    'Learner',  templateTree('PredictorSelection','interaction-curvature',...
+    'NumVariablesToSample',7,'MaxNumSplits',40000),...
+    'NumLearningCycles',13,'LearnRate',0.45135,'NPrint',5)
+   % 'OptimizeHyperparameters',{'NumLearningCycles','MaxNumSplits','LearnRate','NumVariablesToSample'},...
+   % 'HyperparameterOptimizationOptions',struct('Repartition',true,...
+   % 'AcquisitionFunctionName','expected-improvement-per-second-plus',...
+   % 'Holdout',0.1,...
+  %  'MaxObjectiveEvaluations',10))
 disp('Training Completed')
 toc
+
 %% Validation
 validation=metrics (testset.pickups , md.predict(testset) );
 disp('Held-out test validation results:')
 disp(validation.results)
 figure;
-plot(md.error(testset,'pickups','mode','cumulative'));
+plot(md.loss(testset,'pickups','mode','cumulative'));
 xlabel('Number of trees'); ylabel('MSE');
 
-%% feature importance analysis
-imp = md.OOBPermutedPredictorDeltaError;
-imp=table(md.PredictorNames',imp','VariableNames',{'Predictor','Importance'});
-imp=sortrows(imp,'Importance','descend');
-disp(imp);
-
-
-
+%% compact tree and save
+md=removeLearners(md.compact,6:md.NumTrained);
