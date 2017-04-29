@@ -1,11 +1,11 @@
 ## NYC Taxi Demand Prediction
-> Updated on 2017-04-29: New data (demand.h5, holiday.txt,...) uplaoded to [onedrive](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?folderid=1e27ef8057af4432fbc2d940480dd482d&authkey=AYgG5cth5d2MJGG8LNFQ2qQ)
+> Updated on 2017-04-29: New data (demand.h5, holiday.txt,...) uplaoded to [onedrive](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?guestaccesstoken=xtFRGmTKIG7C3qwO5pdbnqfQkP2p4jZe8bbNXpoErdY%3d&folderid=2_1e27ef8057af4432fbc2d940480dd482d&rev=1)
 
-> Updated on 2017-04-12: Weather data (Meteorology.h5) uploaded to [onedrive](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?folderid=1e27ef8057af4432fbc2d940480dd482d&authkey=AYgG5cth5d2MJGG8LNFQ2qQ)
+> Updated on 2017-04-12: Weather data (Meteorology.h5) uploaded to [onedrive](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?guestaccesstoken=xtFRGmTKIG7C3qwO5pdbnqfQkP2p4jZe8bbNXpoErdY%3d&folderid=2_1e27ef8057af4432fbc2d940480dd482d&rev=1)
 
-> The **[draft](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?docid=134225cf561184cdb99fcac96a455a106&authkey=AeHwvvnySGt9y19YbvKxRSc)** is constantly being updated on onedrive. 
+> The **[draft](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?guestaccesstoken=LHqXGo868BaVSvQXMzDYNbuNIJx%2fNkGBXleUPUp2OwQ%3d&docid=2_134225cf561184cdb99fcac96a455a106&rev=1)** is constantly being updated on onedrive. 
 
-> Updated on 2017-03-21: HDF5 and Holiday data uploaded to [onedrive](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?folderid=1e27ef8057af4432fbc2d940480dd482d&authkey=AYgG5cth5d2MJGG8LNFQ2qQ)
+> Updated on 2017-03-21: HDF5 and Holiday data uploaded to [onedrive](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?guestaccesstoken=xtFRGmTKIG7C3qwO5pdbnqfQkP2p4jZe8bbNXpoErdY%3d&folderid=2_1e27ef8057af4432fbc2d940480dd482d&rev=1)
 
 ### Source of Raw Data
 
