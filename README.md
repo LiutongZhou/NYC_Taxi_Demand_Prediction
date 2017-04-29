@@ -12,7 +12,7 @@
 1. Weather: https://www.ncdc.noaa.gov/qclcd/QCLCD. A batch order is available through https://www.ncdc.noaa.gov/cdo-web/datasets
 2. NYC Taxi: http://www1.nyc.gov/html/tlc/html/about/trip_record_data.shtml
 
-### [Generated Data](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?folderid=1e27ef8057af4432fbc2d940480dd482d&authkey=AYgG5cth5d2MJGG8LNFQ2qQ)
+### [Generated Data](https://facilities-my.sharepoint.com/personal/lz2484_columbia_edu/_layouts/15/guestaccess.aspx?guestaccesstoken=xtFRGmTKIG7C3qwO5pdbnqfQkP2p4jZe8bbNXpoErdY%3d&folderid=2_1e27ef8057af4432fbc2d940480dd482d&rev=1)
 
 The generated data is derived using 2 years' raw yellow taxi data (from 2014-07-01 to 2016-06-30). ~~For now, we used only 6 months' raw data with a total size of 10 GB~~. The data generation process (designed and implemented in a Mapreduce workflow) takes 2.5 hours (for processing two years' data). This process could be done on a cluster (need to contact Columbia HPC) using the same code.
 ____
@@ -42,8 +42,8 @@ Demand: a time table ranging from 2014-07-01 00:00:00 to 2016-06-30 23:00:00 wit
             time                demand     
     ___________________    ________________
 
-    2016-01-01 00:00:00    [29×14×2 double]
-    2016-01-01 01:00:00    [29×14×2 double]
+    2016-01-01 00:00:00    [32×32×2 double]
+    2016-01-01 01:00:00    [32×32×2 double]
     ...                    ...
  ```
  
@@ -51,7 +51,7 @@ For example: `Demand.demand{1}(:,:,1)` is a [32×32 double] matrix corresponding
 ____
 **demand.h5**: the same data rearranged and stored in hdf5 format. It contains two datasets: 'demand_tensor' and 'datetime'
 
-demand_tensor: a 29x14x2x4369 double 4-D tenor. The last dimension corresponds to time. demand_tensor[:][:][0][i] is the pickup matrix at time datetime[i];
+demand_tensor: a 32x32x2x4369 double 4-D tenor. The last dimension corresponds to time. demand_tensor[:][:][0][i] is the pickup matrix at time datetime[i];
 
 datetime: a 4369x1 string timestampe.
 
