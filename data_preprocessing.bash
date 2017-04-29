@@ -10,14 +10,14 @@ bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20160
 bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20160401' gs://nyc_taxi_trip/yellow_tripdata_2016-04.csv
 bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20160501' gs://nyc_taxi_trip/yellow_tripdata_2016-05.csv
 bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20160601' gs://nyc_taxi_trip/yellow_tripdata_2016-06.csv 
-
-bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20160701' gs://nyc_taxi_trip/yellow_tripdata_2016-07.csv 
-bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20160801' gs://nyc_taxi_trip/yellow_tripdata_2016-08.csv 
-bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20160901' gs://nyc_taxi_trip/yellow_tripdata_2016-09.csv 
-bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20161001' gs://nyc_taxi_trip/yellow_tripdata_2016-10.csv 
-bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20161101' gs://nyc_taxi_trip/yellow_tripdata_2016-11.csv 
-bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20161201' gs://nyc_taxi_trip/yellow_tripdata_2016-12.csv 
-
+#
+bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20150701' gs://nyc_taxi_trip/yellow_tripdata_2015-07.csv 
+bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20150801' gs://nyc_taxi_trip/yellow_tripdata_2015-08.csv 
+bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20150901' gs://nyc_taxi_trip/yellow_tripdata_2015-09.csv 
+bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20151001' gs://nyc_taxi_trip/yellow_tripdata_2015-10.csv 
+bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20151101' gs://nyc_taxi_trip/yellow_tripdata_2015-11.csv 
+bq --nosync load --source_format=CSV --skip_leading_rows=1 'NYCTaxi.yellow$20151201' gs://nyc_taxi_trip/yellow_tripdata_2015-12.csv 
+bq ls -j -n 12
 
 # data stats
 bq query --replace --destination_table 'NYCTaxi.stat' \
@@ -73,7 +73,6 @@ bq query --replace --destination_table 'NYCTaxi.cleanyellow' --allow_large_resul
   passenger_count,
   trip_distance,
   VendorID,
-  RatecodeID,
   payment_type,
   fare_amount,
   total_amount,
@@ -92,7 +91,7 @@ WHERE
   AND (trip_distance BETWEEN 0.001  AND 20 )
   AND (total_amount BETWEEN 1  AND 105 )
   AND passenger_count<=6
-  and (fare_amount/trip_distance BETWEEN 2   AND 10)
+  and (fare_amount/trip_distance BETWEEN 2 AND 12)
 HAVING
   (duration BETWEEN 2  AND 120)
   AND (straight_line_dist BETWEEN 0.001  AND 15)
@@ -107,4 +106,48 @@ HAVING
   gs://nyc_taxi_trip/cleanyellow/cleanyellow_*.zip
 
   # To Download data, uncomment the following
-  #  gsutil cp -r gs://nyc_taxi_trip/cleanyellow S:/DataBackup/
+  #  gsutil -m cp -r gs://nyc_taxi_trip/cleanyellow S:\DataBackup\cleanyellow
+  # 
+  #   
+bq query --replace --destination_table 'NYCTaxi.cleanyellow201407_201512' --allow_large_results \
+'SELECT
+  pickup_datetime,
+  dropoff_datetime,
+  pickup_longitude,
+  pickup_latitude,
+  dropoff_longitude,
+  dropoff_latitude,
+  passenger_count,
+  trip_distance,
+  vendor_iD,
+  payment_type,
+  fare_amount,
+  total_amount,
+  #duration in minutes
+  (TIMESTAMP_TO_SEC(dropoff_datetime)-TIMESTAMP_TO_SEC(pickup_datetime))/60 AS duration,
+  #In NYC:
+  #1 degree lat ~= 69.1703234284 miles
+  #1 degree lon ~= 52.3831781372 miles
+  #The magic numbers are the squares of these values
+  SQRT( (4784.533643189461*POW((dropoff_latitude-pickup_latitude),2) + 2743.9973517536278*POW((dropoff_longitude-pickup_longitude),2))) AS straight_line_dist
+FROM
+  [nyc-tlc:yellow.trips]
+WHERE
+  pickup_datetime BETWEEN TIMESTAMP("2014-07-01 00:00:00") and TIMESTAMP("2015-12-31 23:59:59")
+  and (pickup_longitude BETWEEN -74.036206  AND -73.909863)
+  AND (pickup_latitude BETWEEN 40.680276  AND 40.882530)
+  AND (trip_distance BETWEEN 0.001  AND 20 )
+  AND (total_amount BETWEEN 1  AND 105 )
+  AND passenger_count<=6
+  and (fare_amount/trip_distance BETWEEN 2 AND 12)
+HAVING
+  (duration BETWEEN 2  AND 120)
+  AND (straight_line_dist BETWEEN 0.001  AND 15)
+  AND (trip_distance/straight_line_dist BETWEEN 0.95 and 6)
+  # Speed:= trip_distance/(duration/60) in miles/h
+  AND (trip_distance/(duration/60) BETWEEN 3.1  AND 55 ) ;
+  '
+
+  bq extract --compression=GZIP \
+  'traffic-demand-predict:NYCTaxi.cleanyellow201407_201512' \
+  gs://nyc_taxi_trip/cleanyellow201407_201512/cleanyellow_*.zip
