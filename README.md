@@ -51,9 +51,9 @@ For example: `Demand.demand{1}(:,:,1)` is a [32×32 double] matrix corresponding
 ____
 **demand.h5**: the same data rearranged and stored in hdf5 format. It contains two datasets: 'demand_tensor' and 'datetime'
 
-demand_tensor: a 32x32x2x4369 double 4-D tenor. The last dimension corresponds to time. demand_tensor[:][:][0][i] is the pickup matrix at time datetime[i];
+demand_tensor: a 32x32x2x17545 double 4-D tenor. The last dimension corresponds to time. demand_tensor[:][:][0][i] is the pickup matrix at time datetime[i];
 
-datetime: a 4369x1 string timestampe.
+datetime: a 17545x1 string timestampe.
 
   
 
