@@ -1,6 +1,6 @@
 classdef DemandClass
-    %DEMANDCLASS 此处显示有关此类的摘要
-    %   此处显示详细说明
+    %DEMANDCLASS Construct the Demand Object by Calling DemandClass(file_dir)
+    %   e.g. Demand=DemandClass( 'D:\OneDrive - Columbia University\2017Spring\Research\Data\Data\Demand.mat')
     
     properties
         Demand
@@ -8,7 +8,6 @@ classdef DemandClass
         Lat
         Lon
     end
-    
     methods
         function obj=DemandClass(file_dir)
             S=load(file_dir);
@@ -24,6 +23,7 @@ classdef DemandClass
         [pickups,dropoffs]=Flatten(obj);
         tb=Stack(obj);
         Demand=add_holiday_mark(Demand);
+        [dataarray,time,polygonarea ]= DemandQuery(obj, querytime,lat_lon); 
     end
     
 end

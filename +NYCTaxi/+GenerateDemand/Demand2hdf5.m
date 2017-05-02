@@ -10,8 +10,8 @@ h5create(file_dir,'/demand_tensor',size(demand_tensor));
 h5write(file_dir, '/demand_tensor', demand_tensor);
 
 % write date string
-datetime=cellstr(datestr(Demand.time,'yyyy-mm-dd HH:MM'));
-%datetime=cellstr(num2str ( str2num( datestr(Demand.time,'yyyymmddHH'))+1));
+%datetime=cellstr(datestr(Demand.time,'yyyy-mm-dd HH:MM'));
+datetime=cellstr(num2str ( str2num( datestr(Demand.time,'yyyymmddHH'))+1));
 
 
 fid = H5F.open(file_dir,'H5F_ACC_RDWR','H5P_DEFAULT');

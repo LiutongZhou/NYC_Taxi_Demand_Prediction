@@ -1,8 +1,10 @@
-function [dataarray,time ]= DemandQuery(Demand,R, querytime,lat_lon)
+function [dataarray,time,polygonarea ]= DemandQuery(obj, querytime,lat_lon)
 %%DemandQuery [dataarray,time ]= DemandQuery(Demand,R, querytime,lat_lon)
 %Query Demand values for the specified time (or time range) and locations
 %   input:
-%       -Demand and R: The generated Timetable Demand and Refrence Object R
+%       -Demand and R: The generated Timetable Demand and Refrence Object
+%       R. These are properties of the Demand object.
+%
 %       -querytime: a timestamp like {'2016-01-01 10:00:00'}
 %                   or a time range like {'starttime','endtime',timeinterval}
 %                   if querytime is a timestamp, return Demand values for the specified time
@@ -13,11 +15,14 @@ function [dataarray,time ]= DemandQuery(Demand,R, querytime,lat_lon)
 %   output:
 %       -dataarray: 4-d array with the first dimension denoting time. and
 %                   last dimension denoting pickup (1) or dropoff(2). If
-%                   lat_lon polygon specified, return the values defined by
-%                   the polygon. The out put demand is normalized by area (unit: number of people / miles^2)
+%                   lat_lon polygon specified, return the values within polygon. 
+%                   The out put demand is normalized by area and time (unit: number of people / miles^2/hour)
 %       -time: the timestamp vector. time(i) is the timestamp for dataarray(i,:,:,:)
+%       -polygonarea: area of the input polygonal region in miles^2
 
 %% if Demand is not sorted sort first
+Demand=obj.Demand;
+R=obj.R;
 if ~issorted(Demand)% Add Robustness
     Demand=sortrows(Demand) ;
 end
@@ -25,17 +30,22 @@ end
 if ischar(querytime)% Add robustness
     querytime=cellstr(querytime);
 end
+
+[~,dt] = isregular(Demand); %get time interval of table -->  dt
+if isnan(dt) % check demand validity
+    ME = MException('MyComponent:DemandIrregular', 'The Demand time table is irregular');
+    throw(ME);
+end
 if length(querytime)==1
-    [~,dt] = isregular(Demand); %get time interval of table -->  dt
     tb=Demand(withtol(querytime,dt),:); % query control time points
     switch height(tb)
         case 3 % if three control time points, then the query timestamp happens to be a record in the middle
-            dataarray=tb{2,1}{:}./cellarea(R);    % output the queried Demand values
+            dataarray=tb{2,1}{:}./cellarea(R)/hours(dt);    % output the queried Demand values
         case 2 % if two control time points, then apply linear interpolation
             v=cat(ndims(tb.demand{1})+1,tb.demand{:});
             v=shiftdim(v,ndims(v)-1);
             dataarray= squeeze(interp1(tb.time,v,datetime(querytime)));
-            dataarray=dataarray./cellarea(R);
+            dataarray=dataarray./cellarea(R)/hours(dt);
     end
     time=querytime{:};
     %% if query time is a time range
@@ -45,7 +55,7 @@ elseif length(querytime)==3
     tb=Demand(S,:);
     % format data into 4-d array v
     v=cat(ndims(tb.demand{1})+1,tb.demand{:});
-    v=v./cellarea(R);%normalize by area
+    v=v./cellarea(R)/hours(dt);%normalize by area and time interval
     v=shiftdim(v,ndims(v)-1); % shift last dimension: time to the first dimension
     time=datetime(querytime{1}):querytime{3}:datetime(querytime{2}); % generate query time points time
     dataarray= squeeze(interp1(tb.time,v,time));% interp along time dimension
@@ -69,7 +79,7 @@ if exist('lat_lon','var')
     lon=(R.LongitudeLimits(1):R.CellExtentInLongitude:R.LongitudeLimits(2))';
     lat=lat(1:end-1)+R.CellExtentInLatitude/2;
     lon=lon(1:end-1)+R.CellExtentInLongitude/2;
-    dataarray=zeros(2,size(normalized_demand,4));
+    dataarray=zeros(2,size(normalized_demand,4));% the fist dimension: pickup/dropoff, the second dimension: time
     for time_window=1:size(normalized_demand,4)
         for flag=1:2
             F=griddedInterpolant({lat,lon},...
@@ -91,11 +101,7 @@ if exist('lat_lon','var')
         end
     end
 end
-%{
-function i=region(qlat,qlon) % return 1 if query points is in polygon and 0 otherwise
-        i=inpolygon(qlat,qlon,lat_lon(:,1),lat_lon(:,2));
-    end
-%}
+polygonarea=areaint(lat_lon(:,1),lat_lon(:,2),wgs84Ellipsoid('sm'));
 end
 
 function area=cellarea(R)
@@ -112,3 +118,4 @@ function area=cellarea(R)
 Lat=flipud(Lat);
 area=areaquad(Lat(1:end-1,1:end-1),Lon(1:end-1,1:end-1),Lat(2:end,2:end),Lon(2:end,2:end),wgs84Ellipsoid('sm'));
 end
+

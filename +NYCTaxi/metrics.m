@@ -12,7 +12,7 @@ classdef metrics
     end
     
     methods
-        function   obj=metrics(y,yfit)
+        function   obj=metrics(y,yfit) % Constructor 
             RMSE=obj.RMSE(y,yfit);
             R_Squared=obj.R_Squared(y,yfit);
             MAPE=obj.MAPE(y,yfit);

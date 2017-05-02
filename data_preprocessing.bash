@@ -22,33 +22,30 @@ bq ls -j -n 12
 # data stats
 bq query --replace --destination_table 'NYCTaxi.stat' \
 'SELECT
-  MIN(trip_distance) AS trip_min,
-  MAX(trip_distance) AS trip_max,
-  NTH(2501,QUANTILES(trip_distance,10001)) AS trip_q1,
-  NTH(7501,QUANTILES(trip_distance,10001)) AS trip_q3,
-  NTH(9976,QUANTILES(trip_distance,10001)) AS trip_quantile99_75,
-  NTH(9991,QUANTILES(trip_distance,10001)) AS trip_quantile99_9,
-  AVG(trip_distance) AS trip_mean,
-  STDDEV(trip_distance) AS trip_std,
-  MIN(total_amount) AS fare_min,
-  MAX(total_amount) AS fare_max,
-  NTH(2501,QUANTILES(total_amount,10001)) AS fare_q1,
-  NTH(7501,QUANTILES(total_amount,10001)) AS fare_q3,
-  NTH(9976,QUANTILES(total_amount,10001)) AS fare_quantile99_75,
-  NTH(9991,QUANTILES(total_amount,10001)) AS fare_quantile99_9,
-  AVG(total_amount) AS fare_mean,
-  STDDEV(total_amount) AS fare_std,
-  MIN(passenger_count) AS pc_min,
-  MAX(passenger_count) AS pc_max,
-  COUNT(*) AS row_count
+  DAYOFWEEK(pickup_datetime )=1 || DAYOFWEEK(pickup_datetime )=7 AS isweekend,  HOUR(pickup_datetime ) AS hours,
+  NTH(2501,QUANTILES(trip_distance,10001)) AS trip_q1,  NTH(7501,QUANTILES(trip_distance,10001)) AS trip_q3,
+  NTH(9751,QUANTILES(trip_distance,10001)) AS trip_quantile97_5,  NTH(251,QUANTILES(trip_distance,10001)) AS trip_quantile2_5,
+  AVG(trip_distance) AS trip_mean,  NTH(5001,QUANTILES(trip_distance,10001)) AS trip_median,  STDDEV(trip_distance) AS trip_std,
+  #
+  NTH(2501,QUANTILES(duration,10001)) AS duration_q1,  NTH(7501,QUANTILES(duration ,10001)) AS duration_q3,
+  NTH(9751,QUANTILES(duration ,10001)) AS duration_quantile97_5,  NTH(251,QUANTILES(duration ,10001)) AS duration_quantile2_5,
+  AVG(duration) AS duration_mean,  NTH(5001,QUANTILES(duration,10001)) AS duration_median,  STDDEV(duration) AS duration_std,
+  #
+  NTH(2501,QUANTILES(trip_distance /(duration/60),10001)) AS speed_q1,  NTH(7501,QUANTILES(trip_distance /(duration/60) ,10001)) AS speed_q3,
+  NTH(9751,QUANTILES(trip_distance /(duration/60) ,10001)) AS speed_quantile97_5,  NTH(251,QUANTILES(trip_distance /(duration/60) ,10001)) AS speed_quantile2_5,
+  AVG(trip_distance /(duration/60)) AS speed_mean,  NTH(5001,QUANTILES(trip_distance /(duration/60),10001)) AS speed_median,
+  STDDEV(trip_distance /(duration/60)) AS speed_std,
+  #
+  sum(passenger_count) as pickups
+  #
 FROM
-  NYCTaxi.yellow
-WHERE
-  trip_distance>0
-  AND total_amount>0
-  AND passenger_count>0
-  AND pickup_longitude>-74.255  AND pickup_longitude<-73.702
-  AND pickup_latitude>40.4963  AND pickup_latitude<40.9161;'
+  NYCTaxi.cleanyellow
+GROUP BY
+  isweekend,
+  hours
+ORDER BY
+  isweekend,
+  hours;'
 
 # data filtering
 #filter:
