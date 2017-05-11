@@ -9,6 +9,7 @@ classdef DemandClass
         Lon
     end
     methods
+        %Constructor
         function obj=DemandClass(file_dir)
             S=load(file_dir);
             obj.Demand=S.Demand;
@@ -23,7 +24,7 @@ classdef DemandClass
         [pickups,dropoffs]=Flatten(obj);
         tb=Stack(obj);
         Demand=add_holiday_mark(Demand);
-        [dataarray,time,polygonarea ]= DemandQuery(obj, querytime,lat_lon); 
+        [dataarray,time,poly_area,h ]= DemandQuery(obj, querytime,lat_lon,varargin)
     end
     
 end

@@ -1,5 +1,7 @@
-function [dataarray,time,polygonarea ]= DemandQuery(obj, querytime,lat_lon)
-%%DemandQuery [dataarray,time ]= DemandQuery(Demand,R, querytime,lat_lon)
+function [dataarray,time,poly_area,h ]= DemandQuery(obj, querytime,lat_lon,varargin)
+%%DemandQuery [dataarray,time ]= obj.DemandQuery(querytime,lat_lon)
+%             [dataarray,time,poly_area ]= obj.DemandQuery(querytime,lat_lon)
+%             [dataarray,time,poly_area,h ]= obj.DemandQuery(querytime,lat_lon,'Type','timeseries')
 %Query Demand values for the specified time (or time range) and locations
 %   input:
 %       -Demand and R: The generated Timetable Demand and Refrence Object
@@ -19,6 +21,9 @@ function [dataarray,time,polygonarea ]= DemandQuery(obj, querytime,lat_lon)
 %                   The out put demand is normalized by area and time (unit: number of people / miles^2/hour)
 %       -time: the timestamp vector. time(i) is the timestamp for dataarray(i,:,:,:)
 %       -polygonarea: area of the input polygonal region in miles^2
+
+%parse input parameters
+p=inputParser; addParameter(p,'Type','none'); parse(p,varargin{:});
 
 %% if Demand is not sorted sort first
 Demand=obj.Demand;
@@ -84,26 +89,26 @@ if exist('lat_lon','var')
         for flag=1:2
             F=griddedInterpolant({lat,lon},...
                 flipud( normalized_demand(:,:,flag,time_window)    )    );
-            %integrate interpolation function over region
-            
-            %run an efficient algorithm
-            
+            %integrate interpolation function over region          
             dataarray(flag,time_window)=NYCTaxi.intpoly(@(lat,lon)F(lat,lon),...
                 lat_lon(:,1),lat_lon(:,2));
-                    
-            %{
-            %This is inefficient, use intpoly instead.
-                warning('off');
-                dataarray(flag,time_window)   = integral2(@(lat,lon)F(lat,lon).*region(lat,lon),...
-                    min(lat_lon(:,1)),max(lat_lon(:,1)),min(lat_lon(:,2)),max(lat_lon(:,2)));
-                warning('on');
-             %}                   
         end
     end
 end
-polygonarea=areaint(lat_lon(:,1),lat_lon(:,2),wgs84Ellipsoid('sm'));
+if nargout>=3 % output polygon area if three ouputs
+    poly_area=areaint(lat_lon(:,1),lat_lon(:,2),wgs84Ellipsoid('sm'));
+end
+%% Visualization
+switch p.Results.Type
+    case 'TimeSeries'
+        h= tsplot(time,dataarray);
+    case 'DensityMatrix'
+     h= Density_Matrix(time,dataarray);
+end
 end
 
+
+%% Subrutines
 function area=cellarea(R)
 %cellarea area=cellarea(R)
 %   input:
@@ -119,3 +124,43 @@ Lat=flipud(Lat);
 area=areaquad(Lat(1:end-1,1:end-1),Lon(1:end-1,1:end-1),Lat(2:end,2:end),Lon(2:end,2:end),wgs84Ellipsoid('sm'));
 end
 
+function h=tsplot(time,Y)
+% plot Y vs time
+time=time(:);
+if size(Y,2)==length(time)
+    Y=Y';
+end%Robust Control
+
+h=plot(time,Y,'LineWidth',1.5, 'DatetimeTickFormat','MMMM dd, HH:mm');
+ylabel('Density (pickups / miles^2 / hour)');
+ax=gca;
+ax.XLim.Format='u-M-dd HH:mm';
+ax.XAxis.MinorTick='on';
+ax.XAxis.MinorTickValues=time;
+ax.XGrid='on';
+ax.XTickLabel{end}=max(time.Year);
+ax.XTick(end)=max(time);
+legend('pickup density','dropoff density');
+end
+
+function im=Density_Matrix(time,dataarray)
+%Density_Matrix Density_Matrix(time,dataarray) plots density matrix
+tb=timetable(time(:),dataarray(1,:)',dataarray(2,:)',...
+    'VariableNames',{'pickup_density','dropoff_density'});
+tb.hour=hour(tb.Time);
+tb.day=day(tb.Time);
+n_days=numel(unique(tb.day));
+n_hours=numel(unique(tb.hour));
+ind=sub2ind([n_days,n_hours],tb.day-(min(tb.day)-1),tb.hour+1);
+Density=zeros(n_days,n_hours);
+Density(ind)=tb.pickup_density;
+%% Visualize
+im=imagesc([min(tb.hour),max(tb.hour)],[min(tb.day),max(tb.day)],Density);
+colormap hot;c=colorbar;c.Label.String='Density (pickup/miles^2/hour)';
+ax=gca;
+ax.XTick=0:23;xlabel('Hour');
+ax.YTick=1:2:31;ylabel('Day');
+ax.YAxis.MinorTickValues=2:2:30;
+ax.YAxis.MinorTick='on';
+ylim([min(tb.day)-0.5,max(tb.day)+0.5]);
+end

@@ -18,9 +18,5 @@ plot(subtb.Datetime,subtb.Variables)
 mvregress()
 %% synchronize with weather data
 tb=synchronize(Demand,weather.data,'first','nearest');
-
-
-
-%% Decision Tree
-
-%% Random Forest
+%%
+[beta,sigma,E,V] = mvregress(Xcell,Y);

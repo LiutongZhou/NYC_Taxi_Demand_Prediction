@@ -1,10 +1,10 @@
 classdef metrics
-    %METRICS 此处显示有关此类的摘要
+    %METRICS metrics(y,yfit) returns the validation results
     %   此处显示详细说明
     properties
      results table
     end
-    properties(Constant)
+    properties(Constant,Hidden)
         RMSE=@(y,yfit) norm(y-yfit)/sqrt(length(yfit));
         R_Squared=@ (y,yfit) 1-nansum((y-yfit).^2)/nansum((y-nanmean(y)).^2);
         MAPE=@(y,yfit) nanmean(abs(y-yfit)./(y+1));

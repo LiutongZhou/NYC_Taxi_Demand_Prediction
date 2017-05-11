@@ -1,10 +1,50 @@
-function  DemandVis( Demand,R,querytime )
-%DEMANDVIS 此处显示有关此函数的摘要
-%
-%% imagesc
-figure
-im=imagesc(demand);
+function  [h,f]=Vis(obj,querytime ,type)
+%VIS Visualize Demand Matrix 
 
+%% validate parameter
+p=inputParser;
+addRequired(p,'DemandObj',@(x)isa(x,'NYCTaxi.DemandClass'));
+addRequired(p,'time');
+validationFcn=@(x) ismember(x,{'image','bar'});
+addRequired(p,'Type',validationFcn );
+parse(p,obj,querytime,type);
+demand=obj.DemandQuery(querytime);
+
+%% Set demand tensor
+if ndims(demand)==3
+    demand=demand(:,:,1); %visualize one frame 
+    cmin=min(demand(:));
+    cmax=max(demand(:));
+elseif ndims(demand)==4
+    demand=shiftdim(demand,1);%visualzie many frames
+    demand=squeeze(demand(:,:,1,:));
+    % set color axis limit
+    cmin=min(demand(:));
+    cmax=max(demand(:));
+else
+    error('Unexpected Results');
+end
+%% Visualize n frames
+n=size(demand,3);
+f(1:n)=figure;
+switch p.Results.Type
+%% imagesc
+case 'image'
+    h(1:n)=imagesc;% init array
+    for i=1:n
+        f(i)=figure(i);
+        h(i)=imagesc(demand(:,:,i),[cmin,cmax]);
+        colormap jet;
+    end
+%% Bar3
+case 'bar'
+    for i=1:n
+        f(i)=figure(i);
+        bar3d(demand(:,:,i));
+        caxis([cmin,cmax]);
+        zlim([cmin,cmax]);
+    end
+end
 %% Geo show Base Map
 nycshape=shaperead('nycshape\manhattan.shp',...
     'Selector',{@(BoroName) strcmpi(BoroName,'Manhattan'),'BoroName'},'UseGeoCoords',true) ;
@@ -31,49 +71,26 @@ end
 for i=ceil(length(ct.Children)/2):length(ct.Children);ct.Children(i).FaceAlpha=0.5;ct.Children(i).FaceAlpha=0.3;end
 %% Surface Plot on top of Contour
 usamap(zeros(R.RasterSize),R);
-f=geoshow(demand,R,'DisplayType','surface','ZData',demand+4000,'CData',demand,'FaceAlpha',0.4);
-view(3)
+f=geoshow(demand,R,'DisplayType','surface',...
+                   'FaceAlpha',0.6,...
+                   'CData',demand,...
+                   'ZData',demand+100);
+daspectm('m',0.5)
 %tightmap
-daspectm('m',3)
-
-%% Mesh Base Map
-usamap(zeros(R.RasterSize),R);
-f4=geoshow(Demand.demand{1}(:,:,1),R,'DisplayType','mesh')
+maptool
+%% Mesh Plot
+%usamap(zeros(R.RasterSize),R);
+f4=geoshow(demand,R,'DisplayType','mesh');
+set(f4,{'FaceAlpha','EdgeColor','EdgeAlpha','ZData'},{0,[0,0,0],0.5,zeros(size(demand))})
+colormap jet
+title('Manhattan');
 %% texture Mesh Map on top of Mesh Base Map
 usamap(zeros(R.RasterSize),R);
 f5=geoshow(demand,R,'DisplayType','texturemap');
-%% 3-D lighted shaded relief of regular data grid on top of texture Mesh Map
-usamap(zeros(R.RasterSize),R);
-f2= meshlsrm(demand,R,[0,90]);
 maptool
 %% add stem bar
 h=stem3m(40.8,-74,1000,'LineWidth',10)
 
-%% Manhattan All Year Round
- colormap(gray(256)) 
-
-%% Bar
-b=bar3(Demand.demand{1}');
-lift=20*max(max(b(1).ZData));
-for k = 1:length(b)
-    b(k).CData = b(k).ZData;
-    b(k).FaceColor = 'interp';
-    b(k).FaceAlpha=1;
-    b(k).EdgeAlpha=0.25;
-  %  b(k).EdgeColor=[1 1 1];
-  b(k).ZData=b(k).ZData+lift
-end
-c=colormap('jet');
-c(1,:)=1;
-colormap(c);
-colorbar
-hold on
-contour(Z);
-axis off;
-grid2image(Demand.demand{1},R)
-figure
-usamap(Z,R)
-geoshow(Z,R,'DisplayType','texturemap')
 
 %% test overlay
 load_settings

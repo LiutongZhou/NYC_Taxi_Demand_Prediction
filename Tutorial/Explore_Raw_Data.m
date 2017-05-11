@@ -58,7 +58,7 @@ labelnames={'Average trip distance (miles)','Average duration (min)',...
           'Average speed (mph)', 'Pickups (persons per hour)'};
 varnames={'trip_mean','duration_mean','speed_mean','pickups'};
 for i=1:4
-    f(i)=figure('PaperType','usletter','Position',[348.2000 276.2000 695.2000 368.0000]);
+    f(i)=figure('PaperType','usletter','Position',[138.6000 394.6000 488 321.6000]);
     X=reshape(tb.hours,[],2) ; Y=reshape(  tb.(varnames{i}),[],2);
     if ismember(i,[1,2,3])
         lowerror=tb.(varnames{i}) - tb.( regexprep(varnames{i},'^(\w+)_\w*','$1_q1'));
@@ -75,7 +75,7 @@ for i=1:4
         h_bd2=outlinebounds(h, p); set(h_bd2,{'LineWidth','LineStyle'},{0.1,'-.';0.1,'-.'});
         legend([h;h_bd1(:);h_bd2(:)],'Average by Weekday','Average by Weekend', ...
                              'Lower and Upper Quartiles','Lower and Upper Quartiles',...
-                             '95% Confidence Interval','95% Confidence Interval',...
+                             '2.5%~97.5% Quantile Ranges','2.5%~97.5% Quantile Ranges',...
                              'Location','best');
     else
         h=plot(X,Y);
